@@ -1,0 +1,14 @@
+---
+# tasks file for prac_3
+- name: Get the UUID of the device
+  shell: lsblk -no UUID "{{ var_device }}"
+  register: device_uuid
+
+- name: Write line to /etc/fstab and mount device
+  ansible.posix.mount:
+    path: "{{ var_path }}"
+    src: 'UUID={{ device_uuid.stdout }}'
+    fstype: "{{ var_fstype }}"
+    opts: "{{ var_opts }}"
+    state: mounted
+

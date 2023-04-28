@@ -1,0 +1,7 @@
+---
+# vars file for prac_3
+var_device: /dev/vdb1
+var_path: /data/speci
+var_fstype: xfs
+var_opts: defaults
+

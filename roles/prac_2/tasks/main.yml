@@ -1,0 +1,29 @@
+---
+# tasks file for prac_2
+- name: Install NFS package
+  ansible.builtin.dnf:
+    name: "{{ var_package }}"
+    state: present
+
+- name: Create shared directory
+  ansible.builtin.file:
+    path: "{{ var_shared_dir }}"
+    state: directory
+    owner: "{{ var_owner }}"
+    group: "{{ var_group }}"
+    mode: "{{ var_mode }}"
+
+- name: Modify /etc/exports file
+  ansible.builtin.lineinfile:
+    path: "/etc/exports"
+    state: present
+    line: "{{ var_shared_dir }} {{ var_options }} "
+  notify: Start and enable NFS service
+
+- name: Allow NFS service on firewall
+  ansible.posix.firewalld:
+    service: "{{ var_firewall_service }}"
+    immediate: true
+    permanent: true
+    state: enabled
+
